@@ -18,7 +18,7 @@ batch.Put("some data")
 
 ## Documentation
 
-[GoDoc](https://pkg.go.dev/github.com/gotidy/batcher)
+[Go Reference](https://pkg.go.dev/github.com/gotidy/batcher)
 
 ## License
 

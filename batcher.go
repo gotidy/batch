@@ -19,6 +19,7 @@ type Flusher interface {
 }
 
 // FlusherFunc implements the Flusher interface for the flushing function.
+// Batch slice is recuperated automatically after returning.
 type FlusherFunc func(batch []interface{})
 
 // Flush the batch.

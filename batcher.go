@@ -77,7 +77,7 @@ type Batcher struct {
 // If Flusher is nil, then Batcher panic.
 func New(f Flusher, opts ...Option) *Batcher {
 	if f == nil {
-		panic(errors.New("flusher must be deffined"))
+		panic(errors.New("flusher must be defined"))
 	}
 
 	b := &Batcher{

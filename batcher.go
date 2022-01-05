@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	// Default batch size.
+	// DefaultBatchSize is the default batch size.
 	DefaultBatchSize = 100
-	// Default flush interval.
+	// DefaultFlushInterval is the default flush interval.
 	DefaultFlushInterval = time.Second
 )
 

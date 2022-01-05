@@ -7,28 +7,56 @@ import (
 )
 
 const (
-	DefaultBatchSize     = 100
+	// Default batch size.
+	DefaultBatchSize = 100
+	// Default flush interval.
 	DefaultFlushInterval = time.Second
 )
 
+// Flusher describes the interface of the batch flusher.
+type Flusher interface {
+	Flush(batch []interface{}) (recuperate bool)
+}
+
+// FlusherFunc implements the Flusher interface for the flushing function.
+type FlusherFunc func(batch []interface{})
+
+// Flush the batch.
+func (f FlusherFunc) Flush(batch []interface{}) (recuperate bool) {
+	f(batch)
+	return true
+}
+
+// FlusherNoRecuperateFunc implements the Flusher interface for the flushing function.
+// The batch slice will not be recuperated. However it can be recuperated later with
+// Batcher.Recuperate function.
+type FlusherNoRecuperateFunc func(batch []interface{})
+
+// Flush the batch.
+func (f FlusherNoRecuperateFunc) Flush(batch []interface{}) (recuperate bool) {
+	f(batch)
+	return false
+}
+
+// Option sets the batcher option.
 type Option func(*Batcher)
 
+// WithBatchSize sets batch size.
 func WithBatchSize(size int) func(*Batcher) {
 	return func(b *Batcher) {
 		b.BatchSize = size
 	}
 }
 
+// WithFlushInterval sets flush interval.
 func WithFlushInterval(interval time.Duration) func(*Batcher) {
 	return func(b *Batcher) {
 		b.FlushInterval = interval
 	}
 }
 
-type Flusher interface {
-	Flush(batch []interface{}) (recuperate bool)
-}
-
+// Batcher accumulate messages in an internal buffer and flushes it if it is full
+// or flush interval is expired.
 type Batcher struct {
 	BatchSize     int
 	FlushInterval time.Duration
@@ -45,6 +73,8 @@ type Batcher struct {
 	closed bool
 }
 
+// New creates a new batcher with defined Flusher and options.
+// If Flusher is nil, then Batcher panic.
 func New(f Flusher, opts ...Option) *Batcher {
 	if f == nil {
 		panic(errors.New("flusher must be deffined"))
@@ -96,6 +126,7 @@ func (b *Batcher) run() {
 	}()
 }
 
+// Close the batcher.
 func (b *Batcher) Close() {
 	b.ticker.Stop()
 	close(b.cancel)
@@ -123,6 +154,7 @@ func (b *Batcher) flush(batch []interface{}) {
 	}
 }
 
+// Put accumulate value into internal buffer.
 func (b *Batcher) Put(v interface{}) {
 	var batch []interface{}
 
@@ -144,6 +176,8 @@ func (b *Batcher) Put(v interface{}) {
 	}
 }
 
+// Recuperate the a batch slice fo reusing.
+// Recuperation extremely decrease memory allocations.
 func (b *Batcher) Recuperate(batch []interface{}) {
 	b.pool.Put(batch)
 }

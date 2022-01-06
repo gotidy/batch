@@ -1,9 +1,9 @@
-# Batcher 
+# Batch
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/gotidy/batcher.svg)](https://pkg.go.dev/github.com/gotidy/batcher) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/gotidy/batcher)](https://goreportcard.com/report/github.com/gotidy/batcher)
 
-`batcher` collect a data and flush it if the batch is full or the interval is elapsed.
+`Batcher` collect a data and flush it if the batch is full or the interval is elapsed.
 
 ## Installation
 

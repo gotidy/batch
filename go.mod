@@ -1,3 +1,3 @@
-module github.com/gotidy/batcher
+module github.com/gotidy/batch
 
-go 1.18
+go 1.17

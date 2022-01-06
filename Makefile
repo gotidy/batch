@@ -21,7 +21,7 @@ lint: mod
 tools:
 	go install github.com/mvdan/gofumpt
 	if [[ "$$OSTYPE" == "darwin"* ]]; then curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.43.0; fi	
-	if [[ "$$OSTYPE" == "linux-gnu"* ]]; then wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.41.1; fi
+	if [[ "$$OSTYPE" == "linux-gnu"* ]]; then wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.43.0; fi
 
 pre-commit:
 	pip3 install pre-commit
